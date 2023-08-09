@@ -2,7 +2,7 @@ import 'package:dailydose/test_widgets/textTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:dailydose/constants/categroy.dart';
+import 'package:dailydose/constants/category.dart';
 import 'package:dailydose/constants/db_constants.dart';
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/provider/url_provider.dart';
@@ -22,7 +22,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      width: MediaQuery.of(context).size.width * .7,
+      width: MediaQuery.of(context).size.width * 0.7,
       color: Theme.of(context).colorScheme.background,
       // color: Colors.yellow,
       child: SafeArea(
@@ -101,10 +101,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: const Text("Text Theme"),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TextThemeWidget(),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TextThemeWidget(),
+                    ),
+                  );
                 },
               )
             ],

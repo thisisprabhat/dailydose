@@ -45,4 +45,4 @@ app.*.map.json
 
 #lib gitignore
 /lib/test_widgets
-lib/constants/api_key.dart
+/lib/constants/api_key.dart

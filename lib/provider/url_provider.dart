@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:dailydose/constants/api_key.dart';
-import 'package:dailydose/constants/categroy.dart';
+import 'package:dailydose/constants/category.dart';
 
 class UrlProvider extends ChangeNotifier {
   final String baseUrl = "https://gnews.io/api/v4/";

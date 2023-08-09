@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../constants/categroy.dart';
+import '../constants/category.dart';
 
 class CountrySelector extends StatelessWidget {
   const CountrySelector({super.key});
