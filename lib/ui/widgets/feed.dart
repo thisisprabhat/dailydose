@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/models/daily_news.dart';
-import 'package:dailydose/models/news_details.dart';
 import 'package:dailydose/ui/widgets/feed_image_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,24 +33,6 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
-    // DateTime t = formatDateTime("2022-11-28T08:00:04Z");
-
-    // var ct = DateTime(t.year, t.month, t.day);
-    // var dateTime =
-    //     DateFormat("yyyy-MM-dd HH:mm:ss").parse("2022-11-28T08:00:04Z", true);
-
-    // var dateLocal = dateTime.toLocal();
-    // print(dateLocal);
-
-    // var date = 'Mon, 11 Aug 2014 12:53 pm PDT';
-    // DateFormat format = new DateFormat("EEE, dd MMM yyyy hh:mm a zzz");
-    // date = date.replaceFirst(' pm', ' PM').replaceFirst(' am', ' AM');
-    // print(date);
-    // print(format.parse(date));
-    // print(DateTime.now().timeZoneName);
-    // print("2022-11-28T08:00:04Z");
-    // print(ct);
-
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -160,8 +141,8 @@ class _FeedState extends State<Feed> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        await Clipboard.setData(
-                            ClipboardData(text: widget.data!.url));
+                        // await Clipboard.setData(
+                        //     ClipboardData(text: widget.data!.url));
                         await FlutterShare.share(
                             title: widget.data!.title!,
                             text: widget.data!.description,

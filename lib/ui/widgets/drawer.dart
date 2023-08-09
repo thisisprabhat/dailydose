@@ -1,3 +1,4 @@
+import 'package:dailydose/test_widgets/textTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -96,6 +97,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ],
                 onChanged: (value) {},
               ),
+              ListTile(
+                title: const Text("Text Theme"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TextThemeWidget(),
+                      ));
+                },
+              )
             ],
           ),
         ),

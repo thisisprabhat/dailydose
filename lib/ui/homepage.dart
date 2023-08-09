@@ -1,15 +1,11 @@
-import 'dart:convert';
-
+import 'package:dailydose/ui/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dailydose/constants/db_constants.dart';
 import 'package:dailydose/models/daily_news.dart';
-import 'package:dailydose/models/news_details.dart';
 import 'package:dailydose/ui/widgets/drawer.dart';
 import 'package:dailydose/ui/widgets/feed.dart';
-import 'package:dailydose/utils/colored_log.dart';
 import 'package:dailydose/utils/data_services.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,6 +64,17 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         title: const Text('Daily Dose'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewsSearchPage(),
+                    ));
+              },
+              icon: Icon(Icons.search)),
+        ],
       ),
       body: data == null
           ? const Center(
