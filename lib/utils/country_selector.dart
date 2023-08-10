@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../constants/category.dart';
+import 'colored_log.dart';
 
 class CountrySelector extends StatelessWidget {
   const CountrySelector({super.key});
@@ -19,7 +20,7 @@ class CountrySelector extends StatelessWidget {
           leading: SvgPicture.network(flagUrl!),
           enableFeedback: true,
           onTap: () {
-            print(countryCode);
+            ColoredLog(countryCode, name: "Country Code");
           },
           enabled: true,
         );

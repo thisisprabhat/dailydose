@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/models/daily_news.dart';

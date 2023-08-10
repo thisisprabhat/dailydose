@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:dailydose/constants/api_key.dart';
 import 'package:dailydose/models/daily_news.dart';
 import 'package:dailydose/utils/colored_log.dart';
-import 'package:dailydose/utils/helper/faliure.dart';
 
 getHttpRequest() async {
   const url =

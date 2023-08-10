@@ -1,3 +1,4 @@
+import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/category.dart';
@@ -16,7 +17,7 @@ class TopicSelector extends StatelessWidget {
           title: Text(topicName!),
           enableFeedback: true,
           onTap: () {
-            print(topicCode);
+            ColoredLog(topicCode, name: "Topic Code");
           },
           enabled: true,
         );

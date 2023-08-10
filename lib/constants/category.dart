@@ -52,10 +52,10 @@ const List<Map<String, String?>> kListOfTopic = [
   {'name': 'Entertainment', 'code': 'entertainment'},
 ];
 const List<Map<String, String>> kListOfLanguage = [
+  {'name': 'English', 'code': 'en'},
   {'name': 'Arabic', 'code': 'ar'},
   {'name': 'Chinese', 'code': 'zh'},
   {'name': 'Duch', 'code': 'nl'},
-  {'name': 'English', 'code': 'en'},
   {'name': 'French', 'code': 'fr'},
   {'name': 'German', 'code': 'de'},
   {'name': 'Greek', 'code': 'el'},

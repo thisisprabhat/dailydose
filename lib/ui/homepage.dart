@@ -70,10 +70,10 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NewsSearchPage(),
+                      builder: (context) => const NewsSearchPage(),
                     ));
               },
-              icon: Icon(Icons.search)),
+              icon: const Icon(Icons.search)),
         ],
       ),
       body: data == null
@@ -93,51 +93,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-// ListView.builder(
-//         itemCount: news!.length,
-//         itemBuilder: (context, index) {
-//           {
-//             final newsDetails = NewsDetails.fromJson(news![index]);
-
-//             return ListTile(
-//               title: Text(newsDetails.description!),
-//               leading: Image.network(newsDetails.image!),
-//               subtitle: Text(newsDetails.description!),
-//             );
-//           }
-//         },
-//       ),
-
-
-     // body: FutureBuilder(
-      //     future: news,
-      //     builder: (context, snapshot) {
-      //       if (snapshot.hasData) {
-      //         return ListView.builder(
-      //           itemCount: snapshot.data?.length,
-      //           itemBuilder: (context, index) {
-      //             {
-      //               final newsDetails =
-      //                   NewsDetails.fromJson(snapshot.data?[index]);
-
-      //               return ListTile(
-      //                 title: Text(newsDetails.description!),
-      //                 leading: Image.network(newsDetails.image!),
-      //                 subtitle: Text(newsDetails.description!),
-      //               );
-      //             }
-      //           },
-      //         );
-      //       } else if (snapshot.hasError) {
-      //         return Center(
-      //           child: const Text("Something went wrong"),
-      //         );
-      //       } else {
-      //         return Center(
-      //           child: CircularProgressIndicator(),
-      //         );
-      //       }
-      //     }),

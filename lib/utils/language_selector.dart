@@ -1,3 +1,4 @@
+import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/category.dart';
@@ -16,7 +17,7 @@ class LanguageSelector extends StatelessWidget {
           title: Text(languageName!),
           enableFeedback: true,
           onTap: () {
-            print(languageCode);
+            ColoredLog(languageCode, name: "Language Code");
           },
           enabled: true,
         );

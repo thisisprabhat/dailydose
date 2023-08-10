@@ -1,9 +1,7 @@
 import 'package:dailydose/test_widgets/textTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:dailydose/constants/category.dart';
-import 'package:dailydose/constants/db_constants.dart';
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/provider/url_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,11 +32,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
               SwitchListTile(
                 title: const Text("Change Theme"),
                 value:
-                    context.watch<ThemeProvider>().themeMode == ThemeMode.light,
+                    context.watch<ThemeProvider>().themeMode == ThemeMode.dark,
+                activeColor: Theme.of(context).colorScheme.onBackground,
                 onChanged: (value) async {
                   context.read<ThemeProvider>().setThemeModeIndex =
                       value ? 0 : 1;
-                  await Hive.box(kThemeBox).put(0, value ? 0 : 1);
                 },
               ),
               DropdownButton(
@@ -57,8 +55,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 elevation: 8,
                 underline: null,
                 enableFeedback: true,
-                hint: Row(
-                  children: const [
+                hint: const Row(
+                  children: [
                     Icon(Icons.location_on),
                     SizedBox(
                       width: 10,
