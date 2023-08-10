@@ -1,5 +1,7 @@
 import 'package:dailydose/constants/category.dart';
 import 'package:dailydose/constants/values.dart';
+import 'package:dailydose/ui/search_page/components/topics.dart';
+import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
 
 class NewsSearchPage extends StatefulWidget {
@@ -26,21 +28,62 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
           showCategory = false;
         });
       } else {
-        setState(() {
-          showCategory = true;
-        });
+        Future.delayed(const Duration(milliseconds: 200))
+            .then((value) => setState(() => showCategory = true));
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.removeListener(() {});
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
+      appBar: _appBar(),
+      body: Padding(
+        padding: kPaddingAll,
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            if (showCategory && _controller.text.isEmpty)
+              Expanded(
+                child: Topic(
+                  onSelect: (val) {
+                    ColoredLog.yellow(val);
+                  },
+                ),
+              )
+            else
+              Expanded(
+                child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      Future.delayed(const Duration(milliseconds: 200));
+                      return ListTile(
+                        onTap: () {
+                          _controller.text = index.toString();
+                          ColoredLog.green(index, name: "listTile index");
+                        },
+                        title: Text("the index is $index"),
+                      );
+                    }),
+              )
+          ],
+        ),
+      ),
+    );
+  }
+
+  AppBar _appBar() => AppBar(
         // The search area here
         title: Container(
-          width: double.infinity,
+          width: double.maxFinite,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           height: 40,
           decoration: BoxDecoration(
@@ -54,9 +97,7 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    _controller.clear();
-                  },
+                  onPressed: () => setState(() => _controller.clear()),
                 ),
                 hintText: 'Search...',
                 hintStyle:
@@ -71,7 +112,7 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
             padding: const EdgeInsets.only(right: 8.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.onBackground,
+                backgroundColor: Theme.of(context).colorScheme.onBackground,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -83,36 +124,5 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
             ),
           ),
         ],
-      ),
-      body: Padding(
-        padding: kPaddingAll,
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            if (showCategory && _controller.text.isEmpty)
-              Expanded(
-                child: Wrap(
-                  children: List.generate(
-                    kListOfTopic.length,
-                    (index) => InkWell(
-                      borderRadius: kBorderRadius,
-                      onTap: () {},
-                      child: Container(
-                        padding: kPaddingAll,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: kBorderRadius,
-                        ),
-                        margin: const EdgeInsets.all(4),
-                        child: Text(kListOfTopic[index]["name"]!),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-          ],
-        ),
-      ),
-    );
-  }
+      );
 }

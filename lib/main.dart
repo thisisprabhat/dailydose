@@ -4,7 +4,7 @@ import 'package:dailydose/provider/theme_provider.dart';
 import 'package:dailydose/provider/url_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/homepage.dart';
+import 'ui/home_page/homepage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
