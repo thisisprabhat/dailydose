@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
         angle: 0.0,
         // drawerShadowsBackgroundColor: Theme.of(context).colorScheme.background,
         slideWidth: MediaQuery.of(context).size.width * 0.75,
+        dragOffset: 200,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:dailydose/ui/favourites_and_saved/favourites_and_saved.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dailydose/constants/category.dart';
@@ -48,15 +49,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final colorScheme = Theme.of(context).colorScheme;
     return ListView(
       children: [
-        const ListTile(
-          title: Text("Favourites"),
-          leading: Icon(Icons.favorite),
-          contentPadding: EdgeInsets.all(0),
+        ListTile(
+          title: const Text("Favourites"),
+          leading: const Icon(Icons.favorite),
+          contentPadding: const EdgeInsets.all(0),
+          enabled: true,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FavouritesAndSavedPage(),
+              ),
+            );
+          },
         ),
-        const ListTile(
-          title: Text("Saved"),
-          leading: Icon(Icons.save),
-          contentPadding: EdgeInsets.all(0),
+        ListTile(
+          title: const Text("Saved"),
+          leading: const Icon(Icons.save),
+          contentPadding: const EdgeInsets.all(0),
+          enabled: true,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FavouritesAndSavedPage(
+                  isSaved: true,
+                ),
+              ),
+            );
+          },
         ),
         ListTile(
           title: const Text("Dark Mode"),

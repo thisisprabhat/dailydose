@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dailydose/constants/db_constants.dart';
 import 'package:dailydose/models/daily_news.dart';
-import 'package:dailydose/ui/widgets/drawer.dart';
 import 'package:dailydose/utils/data_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
