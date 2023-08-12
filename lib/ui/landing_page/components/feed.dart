@@ -55,16 +55,16 @@ class _FeedState extends State<Feed> {
         ),
         child: Column(
           children: [
-            Expanded(child: FeedImageWidget(imageUrl: widget.data!.image!)),
+            Expanded(
+                child: FeedImageWidget(imageUrl: widget.data?.image ?? "")),
             const SizedBox(
               height: 5,
             ),
             Text(
               widget.data!.title!,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
             Text(
               widget.data!.description!,
@@ -75,7 +75,9 @@ class _FeedState extends State<Feed> {
             ),
             InkWell(
               onTap: () async {
-                await launchUrl(Uri.parse(widget.data!.url!));
+                await launchUrl(
+                  Uri.parse(widget.data!.url!),
+                );
               },
               borderRadius: kBorderRadius,
               child: Container(
@@ -107,9 +109,10 @@ class _FeedState extends State<Feed> {
                           " ${widget.data!.publishedAt!.substring(0, 10)}",
                           overflow: TextOverflow.clip,
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: colorScheme.onBackground),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: colorScheme.onBackground,
+                          ),
                         ),
                         InkWell(
                           borderRadius:
@@ -127,7 +130,8 @@ class _FeedState extends State<Feed> {
                           ),
                           onTap: () async {
                             await launchUrl(
-                                Uri.parse(widget.data!.source!.url!));
+                              Uri.parse(widget.data!.source!.url!),
+                            );
                           },
                         ),
                       ],
@@ -139,20 +143,23 @@ class _FeedState extends State<Feed> {
                     tooltip: "Add to favourite",
                   ),
                   IconButton(
-                      onPressed: () async {
-                        // await Clipboard.setData(
-                        //     ClipboardData(text: widget.data!.url));
-                        await FlutterShare.share(
-                            title: widget.data!.title!,
-                            text: widget.data!.description,
-                            linkUrl: widget.data!.url,
-                            chooserTitle: 'Daily Dose Share');
-                      },
-                      tooltip: "Share",
-                      icon: const Icon(Icons.share)),
+                    onPressed: () async {
+                      // await Clipboard.setData(
+                      //     ClipboardData(text: widget.data!.url));
+                      await FlutterShare.share(
+                          title: widget.data?.title ?? "",
+                          text: widget.data?.description ?? "",
+                          linkUrl: widget.data?.url ?? "",
+                          chooserTitle: 'Daily Dose Share');
+                    },
+                    tooltip: "Share",
+                    icon: const Icon(Icons.share),
+                  ),
                   PopupMenuButton(
+                    color: colorScheme.background,
                     shape: const RoundedRectangleBorder(
-                        borderRadius: kBorderRadius),
+                      borderRadius: kBorderRadius,
+                    ),
                     child: const Icon(Icons.more_vert),
                     itemBuilder: (context) {
                       List<String> menuItems = [

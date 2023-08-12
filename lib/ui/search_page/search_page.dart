@@ -109,7 +109,7 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 8.0, top: 10, bottom: 10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.onBackground,
