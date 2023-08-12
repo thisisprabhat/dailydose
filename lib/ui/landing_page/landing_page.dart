@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dailydose/constants/db_constants.dart';
 import 'package:dailydose/models/daily_news.dart';
-import 'package:dailydose/ui/widgets/drawer.dart';
-import 'package:dailydose/ui/home_page/components/feed.dart';
 import 'package:dailydose/utils/data_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import 'components/feed.dart';
+
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key, required this.onMenuPressed});
+  final Function() onMenuPressed;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LandingPage> createState() => _LandingPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LandingPageState extends State<LandingPage> {
   DailyNews? data;
   final PageController _pageController = PageController();
   int currentPageIndex = 0;
@@ -32,13 +33,11 @@ class _HomePageState extends State<HomePage> {
       launchUrl(Uri.parse(data!.articles![currentPageIndex]!.url.toString()))
           .then((value) => null);
     }
-
     return false;
   }
 
   fetchData() async {
     var fetchedValue = await getAssetJsonData(kDailyNewsAssetPath);
-
     setState(() {
       data = fetchedValue;
     });
@@ -57,8 +56,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      drawer: const CustomDrawer(),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: widget.onMenuPressed,
+        ),
         backgroundColor:
             Theme.of(context).colorScheme.background.withAlpha(240),
         elevation: 0,
@@ -68,10 +70,11 @@ class _HomePageState extends State<HomePage> {
           IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NewsSearchPage(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NewsSearchPage(),
+                  ),
+                );
               },
               icon: const Icon(Icons.search)),
         ],
@@ -89,7 +92,8 @@ class _HomePageState extends State<HomePage> {
                 return Feed(
                   data: data!.articles![index],
                 );
-              }),
+              },
+            ),
     );
   }
 }

@@ -29,7 +29,7 @@ final lightTheme = ThemeData.light(
 final darkTheme = ThemeData.dark().copyWith(
   useMaterial3: true,
   // backgroundColor: const Color(0XFF241c1c),
-  scaffoldBackgroundColor: const Color(0XFF241c1c),
+  scaffoldBackgroundColor: const Color(0XFF241C1C),
   dividerColor: Colors.grey,
   colorScheme: const ColorScheme(
     primary: Color(0XFF241c1c),
