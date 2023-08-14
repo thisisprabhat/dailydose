@@ -18,7 +18,6 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -100,7 +99,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             borderRadius: kBorderRadius,
             child: SvgPicture.network(
               height: 50,
-              kListOfCountry[context.watch<UrlProvider>().countryIndex]
+              kListOfCountry[context.watch<NewsProvider>().countryIndex]
                   ['flag']!,
             ),
           ),
@@ -122,10 +121,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
             (i) => DropdownMenuItem(
               value: kListOfCountry[i]['name'],
               enabled: true,
-              onTap: () => context.read<UrlProvider>().setCountry = i,
+              onTap: () => context.read<NewsProvider>().setCountry = i,
               child: Container(
                 decoration: BoxDecoration(
-                  color: context.watch<UrlProvider>().countryIndex == i
+                  color: context.watch<NewsProvider>().countryIndex == i
                       ? Theme.of(context).colorScheme.secondary
                       : Colors.transparent,
                   borderRadius: kBorderRadius,
@@ -161,7 +160,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               borderRadius: kBorderRadiusSmall,
             ),
             child: Text(
-              kListOfLanguage[context.watch<UrlProvider>().languageIndex]
+              kListOfLanguage[context.watch<NewsProvider>().languageIndex]
                       ['code'] ??
                   "",
               style: Theme.of(context).textTheme.bodySmall,
@@ -182,10 +181,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
             (i) => DropdownMenuItem(
               value: kListOfLanguage[i]['name'],
               enabled: true,
-              onTap: () => context.read<UrlProvider>().setLanguage = i,
+              onTap: () => context.read<NewsProvider>().setLanguage = i,
               child: Container(
                 decoration: BoxDecoration(
-                  color: context.watch<UrlProvider>().languageIndex == i
+                  color: context.watch<NewsProvider>().languageIndex == i
                       ? Theme.of(context).colorScheme.secondary
                       : Colors.transparent,
                   borderRadius: kBorderRadius,
@@ -198,16 +197,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         kListOfLanguage[i]['name'] ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: context.watch<UrlProvider>().languageIndex == i
-                              ? Colors.black
-                              : colorScheme.onBackground,
+                          color:
+                              context.watch<NewsProvider>().languageIndex == i
+                                  ? Colors.black
+                                  : colorScheme.onBackground,
                         ),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        color: context.watch<UrlProvider>().languageIndex == i
+                        color: context.watch<NewsProvider>().languageIndex == i
                             ? Theme.of(context).colorScheme.tertiary
                             : colorScheme.background,
                         borderRadius: kBorderRadiusSmall,
@@ -216,7 +216,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         kListOfLanguage[i]['code'] ?? "",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color:
-                                  context.watch<UrlProvider>().languageIndex ==
+                                  context.watch<NewsProvider>().languageIndex ==
                                           i
                                       ? Colors.black
                                       : colorScheme.onBackground,
@@ -243,9 +243,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               (index) => ListTile(
                 enabled: true,
                 onTap: () {
-                  context.read<UrlProvider>().setTopic = index;
+                  context.read<NewsProvider>().setTopic = index;
                 },
-                selected: index == context.watch<UrlProvider>().topicIndex,
+                selected: index == context.watch<NewsProvider>().topicIndex,
                 selectedColor: colorScheme.tertiary,
                 selectedTileColor: Colors.green,
                 title: Text(kListOfTopic[index]['name'] ?? ""),
