@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dailydose/constants/category.dart';
 import 'package:dailydose/constants/values.dart';
-import 'package:dailydose/provider/url_provider.dart';
+import 'package:dailydose/provider/news_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/theme_provider.dart';

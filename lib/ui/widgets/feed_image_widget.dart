@@ -21,17 +21,18 @@ class _FeedImageWidgetState extends State<FeedImageWidget>
   void initState() {
     super.initState();
     _controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    AnimationController(duration: const Duration(seconds: 2), vsync: this);
+        AnimationController(duration: const Duration(seconds: 70), vsync: this);
 
     animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInToLinear,
+      curve: Curves.linear,
     ));
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _controller.reverse();
+        Future.delayed(const Duration(seconds: 5)).then((val) {
+          _controller.reverse();
+        });
       } else if (status == AnimationStatus.dismissed) {
         _controller.forward();
       }
@@ -42,6 +43,7 @@ class _FeedImageWidgetState extends State<FeedImageWidget>
 
   @override
   void dispose() {
+    _controller.removeStatusListener((status) {});
     _controller.dispose();
     super.dispose();
   }
@@ -51,68 +53,54 @@ class _FeedImageWidgetState extends State<FeedImageWidget>
     final colorScheme = Theme.of(context).colorScheme;
     return ClipRRect(
       borderRadius: kBorderRadius,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
-          image: DecorationImage(
-            onError: (exception, stackTrace) =>
-                const CircularProgressIndicator(),
-            // scale:  animation.value,
-
-            image: NetworkImage(widget.imageUrl),
-            fit: BoxFit.fitHeight,
-            filterQuality: FilterQuality.low,
-            alignment: Alignment.centerLeft,
-            colorFilter: const ColorFilter.mode(
-              Colors.black54,
-              BlendMode.multiply,
-            ),
-          ),
-          borderRadius: kBorderRadius,
-        ),
-        child: Image.network(
-          errorBuilder: (context, error, stackTrace) => Center(
-            child: Text(
-              "${error.toString().substring(32, 36)}\nFailed to load image...",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-          widget.imageUrl,
-          fit: BoxFit.fitWidth,
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-              child: CircularProgressIndicator(
-                color: colorScheme.onBackground,
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
-                    : null,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          return Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceVariant,
+              image: DecorationImage(
+                onError: (exception, stackTrace) =>
+                    const CircularProgressIndicator(),
+                image: NetworkImage(widget.imageUrl),
+                fit: BoxFit.fitHeight,
+                filterQuality: FilterQuality.low,
+                alignment: Alignment(animation.value, 0),
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.65),
+                  BlendMode.multiply,
+                ),
               ),
-            );
-          },
-        ),
+              borderRadius: kBorderRadius,
+            ),
+            child: Image.network(
+              errorBuilder: (context, error, stackTrace) => Center(
+                child: Text(
+                  "${error.toString()}\nFailed to load image...",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+              widget.imageUrl,
+              fit: BoxFit.fitWidth,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: colorScheme.onBackground,
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
 }
-
-
-//  Image.network(
-//                   widget.networkUrl,
-//                   fit: BoxFit.fill,
-//                   loadingBuilder: (BuildContext context, Widget child,
-//                       ImageChunkEvent? loadingProgress) {
-//                     if (loadingProgress == null) return child;
-//                     return Center(
-//                       child: CircularProgressIndicator(
-//                         value: loadingProgress.expectedTotalBytes != null
-//                             ? loadingProgress.cumulativeBytesLoaded /
-//                                 loadingProgress.expectedTotalBytes!
-//                             : null,
-//                       ),
-//                     );
-//                   },

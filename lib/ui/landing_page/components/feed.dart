@@ -14,22 +14,6 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  double scaleFactor = 1;
-
-  void changeScaleFactor() {
-    Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      scaleFactor += 2;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    // changeScaleFactor();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -56,18 +40,19 @@ class _FeedState extends State<Feed> {
         child: Column(
           children: [
             Expanded(
-                child: FeedImageWidget(imageUrl: widget.data?.image ?? "")),
+              child: FeedImageWidget(imageUrl: widget.data?.image ?? ""),
+            ),
             const SizedBox(
               height: 5,
             ),
             Text(
-              widget.data!.title!,
+              widget.data?.title ?? "",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             Text(
-              widget.data!.description!,
+              widget.data?.description ?? "",
               style: textTheme.labelLarge,
             ),
             const SizedBox(
@@ -76,7 +61,7 @@ class _FeedState extends State<Feed> {
             InkWell(
               onTap: () async {
                 await launchUrl(
-                  Uri.parse(widget.data!.url!),
+                  Uri.parse(widget.data?.url ?? ""),
                 );
               },
               borderRadius: kBorderRadius,
@@ -88,7 +73,7 @@ class _FeedState extends State<Feed> {
                   borderRadius: kBorderRadius,
                 ),
                 child: Text(
-                  widget.data!.content!,
+                  widget.data?.content ?? "",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                   style: textTheme.bodySmall,
@@ -106,7 +91,7 @@ class _FeedState extends State<Feed> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          " ${widget.data!.publishedAt!.substring(0, 10)}",
+                          " ${widget.data?.publishedAt?.substring(0, 10)}",
                           overflow: TextOverflow.clip,
                           style: TextStyle(
                             fontSize: 14,
@@ -121,7 +106,7 @@ class _FeedState extends State<Feed> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),
                             child: Text(
-                              widget.data!.source!.name.toString(),
+                              widget.data?.source?.name.toString() ?? "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style:
@@ -130,7 +115,7 @@ class _FeedState extends State<Feed> {
                           ),
                           onTap: () async {
                             await launchUrl(
-                              Uri.parse(widget.data!.source!.url!),
+                              Uri.parse(widget.data?.source?.url ?? ""),
                             );
                           },
                         ),
@@ -165,7 +150,7 @@ class _FeedState extends State<Feed> {
                       List<String> menuItems = [
                         "Report content",
                         "Save for later",
-                        "visit ${widget.data!.source}"
+                        "visit : ${widget.data?.source?.name ?? ""}"
                       ];
                       return List.generate(
                         menuItems.length,
