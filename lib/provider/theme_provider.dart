@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ThemeProvider extends ChangeNotifier {
   ThemeProvider() {
     SharedPrefRepo.getThemeModeIndex().then((value) {
-      _themeModeIndex = value ?? 2;
+      _themeModeIndex = value ?? 1;
       notifyListeners();
     });
   }
