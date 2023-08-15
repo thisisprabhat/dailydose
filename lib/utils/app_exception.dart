@@ -37,7 +37,7 @@ import 'colored_log.dart';
 /// 500. InternalServerException(),
 /// 503. ServiceUnavailableException(),
 class AppExceptionHandler {
-  static handleExceptions(Exception error, int? statusCode) {
+  static handleExceptions(Object error, int? statusCode) {
     ColoredLog.red(error, name: "Exception");
     ColoredLog.magentaBright(statusCode, name: "StatusCode");
     if (error is SocketException) {
