@@ -9,7 +9,7 @@ import 'package:dailydose/constants/category.dart';
 
 class NewsProvider extends ChangeNotifier {
   NewsProvider() {
-    // initMethod();
+    initMethod();
   }
 
   initMethod() async {

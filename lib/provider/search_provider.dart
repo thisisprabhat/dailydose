@@ -31,7 +31,7 @@ class SearchProvider extends ChangeNotifier {
     if (_listOfSearches.contains(item)) {
       _listOfSearches.removeWhere((element) => element == item);
       _listOfSearches.insert(0, item);
-    } else {
+    } else if (item.length >= 3) {
       _listOfSearches.insert(0, item);
     }
     _updateSearchList();
