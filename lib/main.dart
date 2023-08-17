@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dailydose/constants/themes.dart';
 import 'package:dailydose/provider/theme_provider.dart';
-import 'package:dailydose/provider/url_provider.dart';
+import 'package:dailydose/provider/news_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/search_provider.dart';
 import 'ui/homepage/homepage.dart';
 
 void main() {
@@ -32,7 +33,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => UrlProvider())
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       builder: (context, child) {
         return MaterialApp(

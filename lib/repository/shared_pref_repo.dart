@@ -9,6 +9,7 @@ class SharedPrefRepo {
   static const String _searchList = "search_list";
   static const String _favouriteNews = "favourite_news";
   static const String _saveForLater = "save_for_later";
+  static const String _darkModeValue = "daily_dose_dark_mode";
 
   static Future<String?> updateSetting(Settings settings) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -113,6 +114,33 @@ class SharedPrefRepo {
       }
     } catch (e) {
       ColoredLog.red(e, name: "getSaveForLaterNews Shared Pref error");
+      return e.toString();
+    }
+  }
+
+  static Future getThemeModeIndex() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final themeModeIndex = prefs.getInt(_darkModeValue);
+      if (themeModeIndex != null) {
+        return themeModeIndex;
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      ColoredLog.red(e, name: "getDarkModeValue Shared Pref error");
+      return e.toString();
+    }
+  }
+
+  static Future updateThemeModeIndex(int themeModeIndex) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      await prefs.setInt(_darkModeValue, themeModeIndex).then((value) {
+        return "List Updated";
+      });
+    } catch (e) {
+      ColoredLog.red(e, name: "updateSaveForLaterNews Shared Pref error");
       return e.toString();
     }
   }
