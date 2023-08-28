@@ -1,3 +1,4 @@
+import 'package:dailydose/ui/single_feed/single_feed_page.dart';
 import 'package:flutter/Material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,10 +42,20 @@ class SearchResults extends StatelessWidget {
                 borderRadius: kBorderRadiusMedium,
               ),
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SingleFeedPage(
+                        data: news,
+                      ),
+                    ),
+                  );
+                },
                 leading: Container(
                   width: 80,
                   decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.background,
                     borderRadius: kBorderRadiusMedium,
                     image: DecorationImage(
                       image: NetworkImage(news?.image ?? ""),

@@ -1,3 +1,4 @@
+import 'package:dailydose/provider/saved_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dailydose/constants/themes.dart';
 import 'package:dailydose/provider/theme_provider.dart';
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => NewsProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => SavedProvider()),
       ],
       builder: (context, child) {
         return MaterialApp(

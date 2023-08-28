@@ -15,6 +15,10 @@ class SearchProvider extends ChangeNotifier {
   }
 
   TextEditingController searchController = TextEditingController();
+  set onTopicSelect(String value) {
+    searchController.text = value;
+    notifyListeners();
+  }
 
   void removeSearchHistory({int? index, bool removeAll = false}) {
     if (removeAll) {
@@ -72,22 +76,25 @@ class SearchProvider extends ChangeNotifier {
     String url = "$urlWithoutTopic${topic ?? "&q=${searchController.text}"}";
     loadingState = LoadingState.loading;
     notifyListeners();
-    try {
-      NewsRepo.getNews(url).then((value) {
-        searchNewsResult = value;
-      }).whenComplete(() {
-        if (searchNewsResult?.articles?.isEmpty ?? true) {
-          loadingState = LoadingState.error;
+
+    NewsRepo.getNews(url).then((value) {
+      if (value is DailyNews) {
+        if (value.articles?.isEmpty ?? false) {
           getNewsException = NotFoundException();
+          loadingState = LoadingState.error;
         } else {
+          searchNewsResult = value;
           loadingState = LoadingState.loaded;
         }
-        notifyListeners();
-      });
-    } on CustomException catch (e) {
-      getNewsException = e;
-      loadingState = LoadingState.error;
+      } else if (value is CustomException) {
+        loadingState = LoadingState.error;
+        getNewsException = value;
+      } else {
+        getNewsException = CustomException();
+        loadingState = LoadingState.error;
+      }
+    }).whenComplete(() {
       notifyListeners();
-    }
+    });
   }
 }

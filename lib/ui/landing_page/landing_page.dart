@@ -5,7 +5,7 @@ import 'package:dailydose/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'components/feed.dart';
+import '../widgets/feed.dart';
 
 class LandingPage extends StatelessWidget {
   LandingPage({super.key, required this.onMenuPressed});

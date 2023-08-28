@@ -1,23 +1,22 @@
+import 'package:dailydose/provider/saved_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/models/daily_news.dart';
 import 'package:dailydose/ui/widgets/feed_image_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Feed extends StatefulWidget {
+class Feed extends StatelessWidget {
   const Feed({super.key, required this.data});
   final DailyNewsArticles? data;
 
   @override
-  State<Feed> createState() => _FeedState();
-}
-
-class _FeedState extends State<Feed> {
-  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final readSaved = context.read<SavedProvider>();
+    final watchSaved = context.watch<SavedProvider>();
 
     return SafeArea(
       child: Container(
@@ -40,19 +39,19 @@ class _FeedState extends State<Feed> {
         child: Column(
           children: [
             Expanded(
-              child: FeedImageWidget(imageUrl: widget.data?.image ?? ""),
+              child: FeedImageWidget(imageUrl: data?.image ?? ""),
             ),
             const SizedBox(
               height: 5,
             ),
             Text(
-              widget.data?.title ?? "",
+              data?.title ?? "",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             Text(
-              widget.data?.description ?? "",
+              data?.description ?? "",
               style: textTheme.labelLarge,
             ),
             const SizedBox(
@@ -61,7 +60,7 @@ class _FeedState extends State<Feed> {
             InkWell(
               onTap: () async {
                 await launchUrl(
-                  Uri.parse(widget.data?.url ?? ""),
+                  Uri.parse(data?.url ?? ""),
                 );
               },
               borderRadius: kBorderRadius,
@@ -73,7 +72,7 @@ class _FeedState extends State<Feed> {
                   borderRadius: kBorderRadius,
                 ),
                 child: Text(
-                  widget.data?.content ?? "",
+                  data?.content ?? "",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                   style: textTheme.bodySmall,
@@ -91,7 +90,7 @@ class _FeedState extends State<Feed> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          " ${widget.data?.publishedAt?.substring(0, 10)}",
+                          " ${data?.publishedAt?.substring(0, 10)}",
                           overflow: TextOverflow.clip,
                           style: TextStyle(
                             fontSize: 14,
@@ -106,7 +105,7 @@ class _FeedState extends State<Feed> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),
                             child: Text(
-                              widget.data?.source?.name.toString() ?? "",
+                              data?.source?.name.toString() ?? "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style:
@@ -115,7 +114,7 @@ class _FeedState extends State<Feed> {
                           ),
                           onTap: () async {
                             await launchUrl(
-                              Uri.parse(widget.data?.source?.url ?? ""),
+                              Uri.parse(data?.source?.url ?? ""),
                             );
                           },
                         ),
@@ -123,8 +122,23 @@ class _FeedState extends State<Feed> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.favorite),
+                    onPressed: () {
+                      if (watchSaved.favouriteNews
+                          .where((element) => element.url == data?.url)
+                          .isEmpty) {
+                        readSaved.addToFavourite = data!;
+                      } else if (watchSaved.favouriteNews
+                          .where((element) => element.url == data?.url)
+                          .isNotEmpty) {
+                        readSaved.removeFromFavourite(data!);
+                      }
+                    },
+                    icon: watchSaved.favouriteNews
+                            .where((element) =>
+                                element.description == data?.description)
+                            .isEmpty
+                        ? const Icon(Icons.favorite_border)
+                        : const Icon(Icons.favorite),
                     tooltip: "Add to favourite",
                   ),
                   IconButton(
@@ -132,9 +146,9 @@ class _FeedState extends State<Feed> {
                       // await Clipboard.setData(
                       //     ClipboardData(text: widget.data!.url));
                       await FlutterShare.share(
-                          title: widget.data?.title ?? "",
-                          text: widget.data?.description ?? "",
-                          linkUrl: widget.data?.url ?? "",
+                          title: data?.title ?? "",
+                          text: data?.description ?? "",
+                          linkUrl: data?.url ?? "",
                           chooserTitle: 'Daily Dose Share');
                     },
                     tooltip: "Share",
@@ -147,21 +161,46 @@ class _FeedState extends State<Feed> {
                     ),
                     child: const Icon(Icons.more_vert),
                     itemBuilder: (context) {
-                      List<String> menuItems = [
-                        "Report content",
-                        "Save for later",
-                        "visit : ${widget.data?.source?.name ?? ""}"
+                      return [
+                        PopupMenuItem(
+                          onTap: () {
+                            if (watchSaved.savedNews
+                                .where((element) => element.url == data?.url)
+                                .isEmpty) {
+                              readSaved.addToSaved = data!;
+                            } else if (watchSaved.savedNews
+                                .where((element) => element.url == data?.url)
+                                .isNotEmpty) {
+                              readSaved.removeFromSaved(data!);
+                            }
+                          },
+                          child: watchSaved.savedNews
+                                  .where((element) => element.url == data?.url)
+                                  .isEmpty
+                              ? const Text("Save for Later")
+                              : const Text("Removed from Saved"),
+                        ),
+                        PopupMenuItem(
+                          onTap: () {
+                            launchUrl(Uri.parse(data?.source?.url ?? ""));
+                          },
+                          child: Text(
+                            "visit  ${data?.source?.name ?? ""}",
+                          ),
+                        )
                       ];
-                      return List.generate(
-                        menuItems.length,
-                        (index) {
-                          return PopupMenuItem(
-                            child: Text(
-                              menuItems[index],
-                            ),
-                          );
-                        },
-                      );
+
+                      // return List.generate(
+                      //   menuItems.length,
+                      //   (index) {
+                      //     return PopupMenuItem(
+                      //       onTap: ,
+                      //       child: Text(
+                      //         menuItems[index],
+                      //       ),
+                      //     );
+                      //   },
+                      // );
                     },
                   ),
                 ],

@@ -34,9 +34,11 @@ class _TopicState extends State<Topic> {
           borderRadius: kBorderRadius,
           // onTap: () => widget.onSelect!(kListOfTopic[index]["name"]!),
           onTap: () {
+            final topic = kListOfTopic[index]["name"]!;
+            context.read<SearchProvider>().onTopicSelect = topic;
             context.read<SearchProvider>().searchNews(
                 context.read<NewsProvider>().urlWithoutTopic,
-                topic: "&topic=${kListOfTopic[index]["name"]!}");
+                topic: "&topic=$topic");
           },
           child: AnimatedOpacity(
             duration: Duration(milliseconds: 200 * index),
