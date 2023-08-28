@@ -42,7 +42,7 @@ final darkTheme = ThemeData.dark().copyWith(
     error: Colors.red,
     onError: Colors.white,
     brightness: Brightness.dark,
-    background: Color(0XFF241c1c),
+    background: Color(0XFF241C1C),
     onBackground: Color(0xFFEDE1E1),
     surface: Color(0xFF403232),
     onSurface: Colors.white,
