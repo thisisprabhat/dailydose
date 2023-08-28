@@ -2,6 +2,7 @@ import 'package:dailydose/repository/shared_pref_repo.dart';
 import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/values.dart';
 import '../models/daily_news.dart';
 import '../repository/get_daily_news_repo.dart';
 import '../utils/app_exception.dart';
@@ -12,6 +13,8 @@ class SearchProvider extends ChangeNotifier {
       _listOfSearches = value;
     });
   }
+
+  TextEditingController searchController = TextEditingController();
 
   void removeSearchHistory({int? index, bool removeAll = false}) {
     if (removeAll) {
@@ -55,27 +58,36 @@ class SearchProvider extends ChangeNotifier {
   }
 
 //!~~~~~~~~Search News~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  DailyNews? searchNews;
-  bool isSearchNewsLoaded = false;
+  DailyNews? searchNewsResult;
+  LoadingState loadingState = LoadingState.hidden;
   CustomException? getNewsException;
-
-  getSearchedNews(String url, String value) {
-    getNewsException = null;
-    isSearchNewsLoaded = false;
+  set updateLoadingState(LoadingState state) {
+    loadingState = state;
     notifyListeners();
-    String searchUrl = "$url&$value";
-    ColoredLog.green(searchUrl, name: "Search Url");
-    //   try {
-    //     NewsRepo.getNews(searchUrl).then((value) {
-    //       searchNews = value;
-    //     }).whenComplete(() {
-    //       isSearchNewsLoaded = true;
-    //       notifyListeners();
-    //     });
-    //   } on CustomException catch (e) {
-    //     getNewsException = e;
-    //     isSearchNewsLoaded = true;
-    //     notifyListeners();
-    //   }
+  }
+
+  searchNews(urlWithoutTopic, {String? topic}) {
+    searchNewsResult = null;
+    getNewsException = null;
+    String url = "$urlWithoutTopic${topic ?? "&q=${searchController.text}"}";
+    loadingState = LoadingState.loading;
+    notifyListeners();
+    try {
+      NewsRepo.getNews(url).then((value) {
+        searchNewsResult = value;
+      }).whenComplete(() {
+        if (searchNewsResult?.articles?.isEmpty ?? true) {
+          loadingState = LoadingState.error;
+          getNewsException = NotFoundException();
+        } else {
+          loadingState = LoadingState.loaded;
+        }
+        notifyListeners();
+      });
+    } on CustomException catch (e) {
+      getNewsException = e;
+      loadingState = LoadingState.error;
+      notifyListeners();
+    }
   }
 }
