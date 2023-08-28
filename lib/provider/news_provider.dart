@@ -1,3 +1,4 @@
+import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/models/daily_news.dart';
 import 'package:dailydose/models/settings.dart';
 import 'package:dailydose/repository/get_daily_news_repo.dart';
@@ -19,12 +20,17 @@ class NewsProvider extends ChangeNotifier {
 
   //! Url Provider______________________________________________________________
   final String baseUrl = "https://gnews.io/api/v4/top-headlines";
-  String get url {
+
+  String get urlWithoutTopic {
     String token = "?token=$kApiKey";
     String country = "&country=${kListOfCountry[countryIndex]['code']}";
     String language = "&lang=${kListOfLanguage[languageIndex]['code']}";
+    return baseUrl + token + country + language;
+  }
+
+  String get url {
     String topic = "&topic=${kListOfTopic[topicIndex]["code"]}";
-    return baseUrl + token + country + language + topic;
+    return urlWithoutTopic + topic;
   }
 
   Settings _setting = Settings();
@@ -36,43 +42,48 @@ class NewsProvider extends ChangeNotifier {
   set setCountry(int index) {
     _setting.country = index;
     _updateSetting();
-    notifyListeners();
+    getDailyNews();
   }
 
   int get topicIndex => _setting.topic ?? 0;
   set setTopic(int index) {
     _setting.topic = index;
     _updateSetting();
-    notifyListeners();
+    getDailyNews();
   }
 
   int get languageIndex => _setting.language ?? 0;
   set setLanguage(int index) {
     _setting.language = index;
     _updateSetting();
-    notifyListeners();
+    getDailyNews();
   }
 
 //!~~~~~~~~~~~Get News~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   DailyNews? dailyNews;
-  bool isDailyNewsLoaded = false;
+  LoadingState loadingState = LoadingState.loading;
   CustomException? getNewsException;
 
   getDailyNews() {
     dailyNews = null;
     getNewsException = null;
-    isDailyNewsLoaded = false;
+    loadingState = LoadingState.loading;
     notifyListeners();
     try {
       NewsRepo.getNews(url).then((value) {
         dailyNews = value;
       }).whenComplete(() {
-        isDailyNewsLoaded = true;
+        if (dailyNews?.articles?.isEmpty ?? true) {
+          loadingState = LoadingState.error;
+          getNewsException = NotFoundException();
+        } else {
+          loadingState = LoadingState.loaded;
+        }
         notifyListeners();
       });
     } on CustomException catch (e) {
       getNewsException = e;
-      isDailyNewsLoaded = true;
+      loadingState = LoadingState.error;
       notifyListeners();
     }
   }

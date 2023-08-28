@@ -162,7 +162,7 @@ class NotFoundException extends CustomException {
       : super(
           title: "Not Found",
           message: "No Results Found!",
-          icon: Icons.not_interested,
+          icon: Icons.exposure_zero_sharp,
         );
 }
 

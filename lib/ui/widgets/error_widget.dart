@@ -17,7 +17,7 @@ class CustomErrorWidget extends StatelessWidget {
         children: [
           Icon(
             exception.icon,
-            size: 42,
+            size: 60,
             color: exception.color,
           ),
           Text(
