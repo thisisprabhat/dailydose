@@ -1,3 +1,4 @@
+import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/provider/news_provider.dart';
 import 'package:dailydose/ui/search_page/search_page.dart';
 import 'package:dailydose/ui/widgets/error_widget.dart';
@@ -43,27 +44,36 @@ class LandingPage extends StatelessWidget {
               icon: const Icon(Icons.search)),
         ],
       ),
-      body: !watch.isDailyNewsLoaded
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : data == null
-              ? CustomErrorWidget(
-                  exceptionCaught: watch.getNewsException,
-                  onPressed: () {
-                    read.getDailyNews();
-                  },
-                )
-              : PageView.builder(
-                  controller: _pageController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: data.articles?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Feed(
-                      data: data.articles?[index],
-                    );
-                  },
-                ),
+      body: () {
+        switch (watch.loadingState) {
+          case LoadingState.loading:
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+            );
+          case LoadingState.error:
+            return CustomErrorWidget(
+              exceptionCaught: watch.getNewsException,
+              onPressed: () {
+                read.getDailyNews();
+              },
+            );
+          case LoadingState.loaded:
+            return PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              itemCount: data?.articles?.length ?? 0,
+              itemBuilder: (context, index) {
+                return Feed(
+                  data: data?.articles?[index],
+                );
+              },
+            );
+          default:
+            return Container();
+        }
+      }(),
     );
   }
 }
