@@ -1,5 +1,4 @@
 import 'package:dailydose/repository/shared_pref_repo.dart';
-import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/values.dart';
