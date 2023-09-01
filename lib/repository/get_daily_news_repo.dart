@@ -18,6 +18,5 @@ class NewsRepo {
       ColoredLog.red(e);
       return AppExceptionHandler.throwException(e, response?.statusCode);
     }
-    ColoredLog.red(response?.body, name: "Get Http Request");
   }
 }

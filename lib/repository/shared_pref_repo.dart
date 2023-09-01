@@ -87,9 +87,8 @@ class SharedPrefRepo {
       List<String>? listInString = prefs.getStringList(_favouriteNews);
       if (listInString != null) {
         listOfFavouriteNews = listInString
-                .map((element) => DailyNewsArticles.fromString(element))
-                .toList() ??
-            [];
+            .map((element) => DailyNewsArticles.fromString(element))
+            .toList();
         return listOfFavouriteNews;
       } else {
         return [];
@@ -122,9 +121,8 @@ class SharedPrefRepo {
       List<String>? listInString = prefs.getStringList(_saveForLater);
       if (listInString != null) {
         listofSavedForLaterNews = listInString
-                .map((element) => DailyNewsArticles.fromString(element))
-                .toList() ??
-            [];
+            .map((element) => DailyNewsArticles.fromString(element))
+            .toList();
         return listofSavedForLaterNews;
       } else {
         return [];

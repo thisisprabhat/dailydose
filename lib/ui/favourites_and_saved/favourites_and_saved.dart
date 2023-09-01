@@ -39,7 +39,7 @@ class FavouritesAndSavedPage extends StatelessWidget {
             )
           : ListView.builder(
               padding: const EdgeInsets.only(right: 12, left: 12, top: 10),
-              itemCount: data.length ?? 0,
+              itemCount: data.length,
               itemBuilder: (context, index) {
                 final news = data[index];
                 return Container(
