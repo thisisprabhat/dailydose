@@ -8,3 +8,6 @@ const kBorderRadiusLarge = BorderRadius.all(Radius.circular(30));
 
 //! Padding ____________________________________________________________________
 const kPaddingAll = EdgeInsets.all(20);
+const kPaddingSmall = EdgeInsets.all(4);
+
+enum LoadingState { loading, loaded, error, hidden }

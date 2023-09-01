@@ -37,38 +37,38 @@ import 'colored_log.dart';
 /// 500. InternalServerException(),
 /// 503. ServiceUnavailableException(),
 class AppExceptionHandler {
-  static handleExceptions(Object error, int? statusCode) {
+  static throwException(Object error, int? statusCode) {
     ColoredLog.red(error, name: "Exception");
     ColoredLog.magentaBright(statusCode, name: "StatusCode");
     if (error is SocketException) {
-      throw InternetSocketException(error.message);
+      return InternetSocketException(error.toString());
     } else if (error is FormatException) {
-      throw DataFormatException(error.message);
+      return DataFormatException(error.message);
     } else if (error is TimeoutException) {
-      throw ApiTimeOutException(error.message);
+      return ApiTimeOutException(error.message);
     } else if (statusCode != 200) {
       switch (statusCode) {
         case 400:
-          throw BadRequestException();
+          return BadRequestException();
         case 401:
-          throw UnAuthorizedException();
+          return UnAuthorizedException();
         case 403:
-          throw ForbiddenException();
+          return ForbiddenException();
         case 404:
-          throw NotFoundException();
+          return NotFoundException();
         case 429:
-          throw TooManyRequestException();
+          return TooManyRequestException();
         case 500:
-          throw InternalServerException();
+          return InternalServerException();
         case 503:
-          throw ServiceUnavailableException();
+          return ServiceUnavailableException();
         default:
-          break;
+          return CustomException();
       }
     } else if (error is HttpException) {
-      throw ApiHttpExceptionException(error.message);
+      return ApiHttpExceptionException(error.message);
     } else {
-      throw CustomException();
+      return CustomException();
     }
   }
 }
@@ -85,6 +85,10 @@ class CustomException implements Exception {
     this.color = Colors.red,
     this.icon = Icons.error,
   });
+  @override
+  String toString() {
+    return "title : $title\nmessage: $message";
+  }
 }
 
 class InternetSocketException extends CustomException {
@@ -92,7 +96,8 @@ class InternetSocketException extends CustomException {
   InternetSocketException(this.errorMessage)
       : super(
           title: "Network Problem",
-          message: errorMessage,
+          message: errorMessage ??
+              "There is some issue with your wifi or your mobile internet",
           icon: Icons.signal_wifi_connected_no_internet_4,
         );
 }

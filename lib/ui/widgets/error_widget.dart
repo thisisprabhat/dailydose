@@ -29,7 +29,7 @@ class CustomErrorWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           if (onPressed != null) ...[
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.onSurface,

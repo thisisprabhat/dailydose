@@ -69,22 +69,25 @@ class NewsProvider extends ChangeNotifier {
     getNewsException = null;
     loadingState = LoadingState.loading;
     notifyListeners();
-    try {
-      NewsRepo.getNews(url).then((value) {
-        dailyNews = value;
-      }).whenComplete(() {
-        if (dailyNews?.articles?.isEmpty ?? true) {
-          loadingState = LoadingState.error;
+
+    NewsRepo.getNews(url).then((value) {
+      if (value is DailyNews) {
+        if (value.articles?.isEmpty ?? false) {
           getNewsException = NotFoundException();
+          loadingState = LoadingState.error;
         } else {
+          dailyNews = value;
           loadingState = LoadingState.loaded;
         }
-        notifyListeners();
-      });
-    } on CustomException catch (e) {
-      getNewsException = e;
-      loadingState = LoadingState.error;
+      } else if (value is CustomException) {
+        loadingState = LoadingState.error;
+        getNewsException = value;
+      } else {
+        getNewsException = CustomException();
+        loadingState = LoadingState.error;
+      }
+    }).whenComplete(() {
       notifyListeners();
-    }
+    });
   }
 }

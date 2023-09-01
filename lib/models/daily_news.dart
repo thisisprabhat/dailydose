@@ -60,6 +60,18 @@ class DailyNewsArticles {
     this.publishedAt,
     this.source,
   });
+  DailyNewsArticles.fromString(String val) {
+    Map<String, dynamic> json = jsonDecode(val);
+    title = json['title']?.toString();
+    description = json['description']?.toString();
+    content = json['content']?.toString();
+    url = json['url']?.toString();
+    image = json['image']?.toString();
+    publishedAt = json['publishedAt']?.toString();
+    source = (json['source'] != null)
+        ? DailyNewsArticlesSource.fromJson(json['source'])
+        : null;
+  }
   DailyNewsArticles.fromJson(Map<String, dynamic> json) {
     title = json['title']?.toString();
     description = json['description']?.toString();
@@ -83,6 +95,11 @@ class DailyNewsArticles {
       data['source'] = source!.toJson();
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
   }
 }
 

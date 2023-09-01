@@ -64,10 +64,13 @@ class SharedPrefRepo {
     }
   }
 
-  static Future updateFavouriteNews(DailyNews? dailyNews) async {
+  static Future updateFavouriteNews(List<DailyNewsArticles> news) async {
+    ColoredLog.green(news.length, name: "Favourite Items length");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      await prefs.setString(_favouriteNews, dailyNews.toString()).then((value) {
+      await prefs
+          .setStringList(_favouriteNews, news.map((e) => e.toString()).toList())
+          .then((value) {
         return "List Updated";
       });
     } catch (e) {
@@ -77,13 +80,18 @@ class SharedPrefRepo {
   }
 
   static Future getFavouriteNews() async {
+    ColoredLog.green("Getting favourites News");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<DailyNewsArticles> listOfFavouriteNews = [];
     try {
-      final newsString = prefs.getString(_favouriteNews);
-      if (newsString != null) {
-        return DailyNews.fromString(newsString);
+      List<String>? listInString = prefs.getStringList(_favouriteNews);
+      if (listInString != null) {
+        listOfFavouriteNews = listInString
+            .map((element) => DailyNewsArticles.fromString(element))
+            .toList();
+        return listOfFavouriteNews;
       } else {
-        return DailyNews();
+        return [];
       }
     } catch (e) {
       ColoredLog.red(e, name: "Get Favourite News Shared Pref error");
@@ -91,29 +99,36 @@ class SharedPrefRepo {
     }
   }
 
-  static Future updateSaveForLaterNews(DailyNews? dailyNews) async {
+  static Future updateSaveForLaterNews(List<DailyNewsArticles> news) async {
+    ColoredLog.green(news.length, name: "Saved Items length");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      await prefs.setString(_saveForLater, dailyNews.toString()).then((value) {
+      await prefs
+          .setStringList(_saveForLater, news.map((e) => e.toString()).toList())
+          .then((value) {
         return "List Updated";
       });
     } catch (e) {
-      ColoredLog.red(e, name: "updateSaveForLaterNews Shared Pref error");
+      ColoredLog.red(e, name: "UpdateSaveForLaterNews Shared Pref error");
       return e.toString();
     }
   }
 
   static Future getSaveForLaterNews() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<DailyNewsArticles> listofSavedForLaterNews = [];
     try {
-      final newsString = prefs.getString(_saveForLater);
-      if (newsString != null) {
-        return DailyNews.fromString(newsString);
+      List<String>? listInString = prefs.getStringList(_saveForLater);
+      if (listInString != null) {
+        listofSavedForLaterNews = listInString
+            .map((element) => DailyNewsArticles.fromString(element))
+            .toList();
+        return listofSavedForLaterNews;
       } else {
-        return DailyNews();
+        return [];
       }
     } catch (e) {
-      ColoredLog.red(e, name: "getSaveForLaterNews Shared Pref error");
+      ColoredLog.red(e, name: "Get SavedForLater News Shared Pref error");
       return e.toString();
     }
   }

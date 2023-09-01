@@ -1,10 +1,10 @@
 import 'package:dailydose/constants/values.dart';
 import 'package:dailydose/provider/news_provider.dart';
 import 'package:dailydose/provider/search_provider.dart';
+import 'package:dailydose/ui/search_page/components/search_history.dart';
+import 'package:dailydose/ui/search_page/components/search_results.dart';
 import 'package:dailydose/ui/search_page/components/topics.dart';
-import 'package:dailydose/utils/colored_log.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class NewsSearchPage extends StatefulWidget {
@@ -15,7 +15,6 @@ class NewsSearchPage extends StatefulWidget {
 }
 
 class _NewsSearchPageState extends State<NewsSearchPage> {
-  final TextEditingController _controller = TextEditingController();
   bool showCategory = true;
 
   late FocusNode _searchFocusNode;
@@ -23,7 +22,8 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
   @override
   void initState() {
     super.initState();
-
+    context.read<SearchProvider>().updateLoadingState = LoadingState.hidden;
+    context.read<SearchProvider>().searchController.clear();
     _searchFocusNode = FocusNode();
     _searchFocusNode.addListener(() {
       if (_searchFocusNode.hasFocus) {
@@ -47,53 +47,19 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
   @override
   Widget build(BuildContext context) {
     final watch = context.watch<SearchProvider>();
-    final read = context.read<SearchProvider>();
-    final url = context.read<NewsProvider>().url;
     return Scaffold(
       appBar: _appBar(),
-      body: GestureDetector(
-        onTap: () {
-          // setState(() => _searchFocusNode.unfocus());
-        },
-        child: Padding(
-          padding: kPaddingAll,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              if (showCategory && _controller.text.isEmpty)
-                Expanded(
-                  child: Topic(
-                    onSelect: (val) {
-                      ColoredLog.yellow(val);
-                    },
-                  ),
-                )
-              else
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: watch.listOfSearches.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String val = watch.listOfSearches[index];
-                      return ListTile(
-                        hoverColor: Colors.transparent,
-                        title: Text(val),
-                        onTap: () {
-                          _controller.text = val;
-                          read.updateSearchIndex = index;
-                          read.getSearchedNews(url, val);
-                        },
-                        trailing: IconButton(
-                          icon: const Icon(Icons.cancel),
-                          onPressed: () {
-                            read.removeSearchHistory(index: index);
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                )
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+        child: Column(
+          children: [
+            if (watch.loadingState != LoadingState.hidden)
+              const Expanded(child: SearchResults())
+            else if (showCategory && watch.searchController.text.isEmpty)
+              const Expanded(child: Topic())
+            else
+              const Expanded(child: SearchHistory()),
+          ],
         ),
       ),
     );
@@ -101,9 +67,9 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
 
   AppBar _appBar() {
     final read = context.read<SearchProvider>();
-    final url = context.read<NewsProvider>().url;
+    final url = context.read<NewsProvider>().urlWithoutTopic;
     return AppBar(
-      // The search area here
+      // The search field here
       title: Container(
         width: double.maxFinite,
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -115,15 +81,18 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
         child: Center(
           child: TextField(
             focusNode: _searchFocusNode,
-            controller: _controller,
+            controller: read.searchController,
             onSubmitted: (value) {
-              read.getSearchedNews(url, value);
+              read.searchNews(url);
               read.addSearchItem = value;
             },
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: () => setState(() => _controller.clear()),
+                onPressed: () {
+                  read.searchController.clear();
+                  read.updateLoadingState = LoadingState.hidden;
+                },
               ),
               hintText: 'Search...',
               hintStyle:
@@ -148,8 +117,8 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
               //     const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
             ),
             onPressed: () {
-              read.getSearchedNews(url, _controller.text);
-              read.addSearchItem = _controller.text;
+              read.searchNews(url);
+              read.addSearchItem = read.searchController.text;
             },
             child: const Text("Search"),
           ),
