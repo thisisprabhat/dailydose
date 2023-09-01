@@ -2,13 +2,17 @@
 
 # dailydose
 
-This is a news app build in flutter, gives the sort news description with an image and upon clicking it's description it opens the original news article.
+> This is a news app build in flutter, gives the sort news description with an image and upon clicking it's description it opens the news article from the original source.
 
 
 
 ⭐ Star us on GitHub — it helps!
 
 ### [Live Preview](https://dailydose-eosin.vercel.app/)
+<img src="screens/recorded_screen.gif" alt="image" width="200" >
+<img src="screens/dark_mode.jpg" alt="image" width="200" >
+<img src="screens/light_mode.jpg" alt="image" width="200" >
+
 
 ## Features 📚
 
@@ -47,7 +51,6 @@ This will clone the whole repository in your system.
 ```dart
 const String kApiKey = "ENTER YOUR OWN API KEY FROM [https://gnews.io]";
 ```
-
 - Now the project is ready to use
 
 ### Pending
