@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 enum Logs { print, debugPrint, logs, hideLogs }
 
-Logs logs = Logs.print;
+Logs _logs = Logs.print;
 
 /// ## ColorCodes
 ///  30. black
@@ -37,7 +37,7 @@ class ColoredLog {
     required int colorCode,
     String? name,
   }) {
-    if (logs == Logs.logs) {
+    if (_logs == Logs.logs) {
       String coloredName =
           "\x1B[${colorCode.toString()}m${name ?? "Log"}\x1B[0m";
       String coloredMessage =
@@ -47,13 +47,13 @@ class ColoredLog {
         coloredMessage,
         name: coloredName,
       );
-    } else if (logs == Logs.print) {
+    } else if (_logs == Logs.print) {
       String coloredName = "\x1B[37m${name ?? "Log"}\x1B[0m";
       String coloredMessage =
           "\x1B[${colorCode.toString()}m${message.toString()}\x1B[0m";
       // ignore: avoid_print
       print("[$coloredName] $coloredMessage");
-    } else if (logs == Logs.debugPrint) {
+    } else if (_logs == Logs.debugPrint) {
       String coloredName = "\x1B[37m${name ?? "Log"}\x1B[0m";
       String coloredMessage =
           "\x1B[${colorCode.toString()}m${message.toString()}\x1B[0m";
