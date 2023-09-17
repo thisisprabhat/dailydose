@@ -9,9 +9,9 @@
 ⭐ Star us on GitHub — it helps!
 
 ### [Live Preview](https://dailydose-eosin.vercel.app/)
-<img src="screenshorts/recorded_screen.gif" alt="image" width="200" >
-<img src="screenshorts/dark_mode.jpg" alt="image" width="200" >
-<img src="screenshorts/light_mode.jpg" alt="image" width="200" >
+<img src="screenshots/recorded_screen.gif" alt="image" width="200" >
+<img src="screenshots/dark_mode.jpg" alt="image" width="200" >
+<img src="screenshots/light_mode.jpg" alt="image" width="200" >
 
 
 ## Features 📚
