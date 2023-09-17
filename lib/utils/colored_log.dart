@@ -24,8 +24,7 @@ Logs _logs = Logs.print;
 ///  96. brightCyan
 ///  97. brightWhite
 class ColoredLog {
-  ColoredLog(var message,
-      {String? name, int? level, int? sequenceNumber, DateTime? time}) {
+  ColoredLog(var message, {String? name}) {
     _customLog(
       message,
       colorCode: 35,
